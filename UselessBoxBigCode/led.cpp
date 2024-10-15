@@ -15,8 +15,6 @@ uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 ledStates_t ledState;
 
-
-
 void setLEDState(ledStates_t _ledState){
   ledState = _ledState;
 }

@@ -5,60 +5,17 @@
 #include <DRV8833.h>
 
 #include "led.h"
+#include "toggle.h"
+#include "myservo.h"
+#include "actions.h"
+#include "myLidServo.h"
+#include "display.h"
 
 /*TOGGLE************************************************************************/
 Bounce bounceToggle = Bounce();
 bool toggled;
 const int togglePin = 36;
 
-enum states_t {
-  TOGGLED,
-  UNTOGGLED,
-  WAITING
-};
-states_t state; // global variable to store current state
-
-/*SERVO ToggleArm************************************************************************/
-Servo toggleArm;
-int pos ;                 // current servo position 
-int increment = 0;            // increment to move for each interval
-int updateInterval = 0;      // interval between updates
-unsigned long lastUpdateServo; // last update of position
-int nextPos; 
-int endPos;  
-
-enum servoStates_t {
-  INACTIVE,
-  MOVINGSERVO,
-  FLIPSWITCHBACK, 
-  FLIPSWITCHBACK2,
-  RETURN,
-  THREESTEPMOVEMENT1,
-  THREESTEPMOVEMENT2,
-  THREESTEPMOVEMENT3,
-  FLIPSWITCHBACKSLOW
-  
-};
-servoStates_t servoState;
-servoStates_t nextServoState;
-
-/*SERVO Lid************************************************************************/
-Servo lid;
-int posLid ;                 // current servo position 
-int incrementLid = 0;            // incrementLid to move for each interval
-int updateIntervalLid = 0;      // interval between updates
-unsigned long lastUpdateLid; // last update of position
-int nextPosLid; 
-int endPosLid;  
-
-enum lidStates_t {
-  INACTIVELID,
-  MOVINGLID,
-  OPENLID,
-  CLOSELID  
-};
-lidStates_t lidState;
-lidStates_t nextLidState;
 
 /*Sensor************************************************************************/
 const int sensorPin = 12;
@@ -70,25 +27,13 @@ volatile int oldSensorState;
 
 /*Motor************************************************************************/
 // Create an instance of the DRV8833:
-DRV8833 driver = DRV8833();
+//DRV8833 driver = DRV8833();
 
 // Pin numbers
 const int inputA1 = 14, inputA2 = 15, inputB1 = 19, inputB2 = 18;
 const int nsleep = 22;
 volatile int speed;
 
-/*ACTIONS************************************************************************/
-enum actionStates_t {
-  NOACTION,
-  ACTION1,
-  ACTION2,
-  ACTION3,
-  FINISHEDACTION
-};
-actionStates_t actionState;
-
-int currentActionStep;
-bool finishedPrevStep;
 
 /*OTHER************************************************************************/
 int actionCounter = 0;
@@ -105,8 +50,8 @@ void setup() {
   bounceToggle.attach(togglePin, INPUT_PULLUP);
   bounceToggle.interval(5);
 
-  state = WAITING;
-  servoState = INACTIVE;
+  setToggleState(WAITING);
+  setServoState(INACTIVE);
 
   attachInterrupt(digitalPinToInterrupt(togglePin), toggleToggled, CHANGE);
 
@@ -115,23 +60,21 @@ void setup() {
 
   setUpLED();
 
-  toggleArm.attach(29); 
-  toggleArm.write(170);
-
-  lid.attach(25); 
-  lid.write(110);
+  setUpToggleArm();
+  setUpLid();
+  
 
   if(bounceToggle.read() == HIGH){
-    servoState = FLIPSWITCHBACK;
+    setServoState(FLIPSWITCHBACK);
   }
-  
+  /*
   pinMode(nsleep, INPUT_PULLUP);
   digitalWrite(nsleep,HIGH); //enable Driver
 
   driver.attachMotorA(inputA1, inputA2);
   driver.attachMotorB(inputB1, inputB2);
   speed = 80;
-
+*/
 }
 
 void loop() {
@@ -175,10 +118,10 @@ void debouncerMethod(){
     //Serial.println(deboucedInput);
     // IF THE CHANGED VALUE IS HIGH
     if ( deboucedInput == HIGH ) {
-      state = TOGGLED;
+      setToggleState(TOGGLED);
       //Serial.print("actionCounter:"); Serial.println (actionCounter);
     } else {
-      state = UNTOGGLED;
+      setToggleState(UNTOGGLED);
     }
   }
 }
@@ -193,13 +136,13 @@ void sensorInterruptedMethod(){
 }
 
 void switchStates(){
-  switch (state){
+  switch (getToggleState()){
     case UNTOGGLED:
       Serial.print("nothing here");
       Serial.println(actionCounter);
-      servoState = RETURN;
-      lidState = CLOSELID;
-      state = WAITING;
+      setServoState(RETURN);
+      setLidState(CLOSELID);
+      setToggleState(WAITING);
       setLEDState(BLUE);
 
       break;
@@ -207,7 +150,7 @@ void switchStates(){
     case TOGGLED:
       actionCounter++;
       Serial.print("actionCounter: "); Serial.println(actionCounter);
-      lidState = OPENLID;
+      setLidState(OPENLID);
       setLEDState(RED);
       /*if (actionCounter%3==1){
         //Serial.println("Got Here");
@@ -219,8 +162,8 @@ void switchStates(){
         actionState = ACTION3;
         //Serial.println("Got Here");
       }*/
-      actionState = ACTION1;
-      state = WAITING;
+      setActionState(ACTION1);
+      setToggleState(WAITING);
       break;
 
     case WAITING:
@@ -229,29 +172,11 @@ void switchStates(){
 
 }
 
-void checkActionState(){
-  switch(actionState) {
-    case NOACTION:
-      currentActionStep = 0;
-      break;    
-    case ACTION1:
-      if (currentActionStep == 0) {
-        finishedPrevStep = false;
-        lidState = OPENLID;
-        currentActionStep++;
-        break;
-      } else if (currentActionStep == 1 && finishedPrevStep == true) {
-        finishedPrevStep = false;
-        servoState = THREESTEPMOVEMENT1;
-        actionState = NOACTION;
-        break;
-      } 
-    }
-}
+
 
 void checkServoState(){
-  pos = constrain(pos, 85, 170);
-  switch (servoState) {
+  
+  switch (getServoState()) {
     case INACTIVE:
       break;
     case MOVINGSERVO:
@@ -261,7 +186,7 @@ void checkServoState(){
       setTargetPositionServo(10, 1, 170);
       setTargetPositionServo(10, 1, 85);
       setDisplayPicID(36);
-      nextServoState = INACTIVE;
+      setNextServoState(INACTIVE);
       break;
     case RETURN:
       setTargetPositionServo(10, 1, 170);
@@ -269,122 +194,26 @@ void checkServoState(){
       break;
     case THREESTEPMOVEMENT1:
       setTargetPositionServo(10, 1, 130);
-      nextServoState = THREESTEPMOVEMENT2;
+      setNextServoState(THREESTEPMOVEMENT2);
       setDisplayPicID(34); 
       break;
     case THREESTEPMOVEMENT2:
       setTargetPositionServo(10, 1, 160);
-      nextServoState = THREESTEPMOVEMENT3;
+      setNextServoState(THREESTEPMOVEMENT3);
       break;
     case THREESTEPMOVEMENT3:
       setTargetPositionServo(10, 1, 85);
-      nextServoState = RETURN;
+      setNextServoState(RETURN);
       break;
     case FLIPSWITCHBACKSLOW:
       setTargetPositionServo(30, 1, 85);
-      nextServoState = INACTIVE;
+      setNextServoState(INACTIVE);
       setDisplayPicID(35);
       break;
   }
 }
 
-void checkLidState(){
-  posLid = constrain(posLid, 85, 180);
-  switch (lidState) {
-    case INACTIVELID:
-      break;
-    case MOVINGLID:
-      movementLid();
-      break;
-    case OPENLID:
-      setTargetPositionLid(10, 1, 180);
-      setDisplayPicID(36);
-      nextLidState = INACTIVELID;
-      break;
-    case CLOSELID:
-      setTargetPositionLid(10, 1, 110);
-      setDisplayPicID(33);
-      break;
-  }
-}
 
-
-
-void setTargetPositionServo(int _updateInterval, int _increment, int _endPos){
-
-  updateInterval = _updateInterval;
-  increment = _increment;
-  endPos = _endPos;
-  servoState = MOVINGSERVO;
-
-}
-
-void setTargetPositionLid(int _updateIntervalLid, int _incrementLid, int _endPosLid){
-
-  updateIntervalLid = _updateIntervalLid;
-  incrementLid = _incrementLid;
-  endPosLid = _endPosLid;
-  lidState = MOVINGLID;
-
-}
-
-void movement(){
-  if((millis() - lastUpdateServo) > updateInterval){  // time to update
-    lastUpdateServo = millis();
-
-    if (pos > endPos){
-      pos -= increment;
-    } else {
-      pos += increment;
-    } 
-    toggleArm.write(pos);
-    state = WAITING; 
-    
-    if(pos == endPos) {
-      finishedPrevStep = true;
-      if (nextServoState != INACTIVE) {
-        servoState = nextServoState;
-      } else {
-        servoState = INACTIVE;
-      }
-    }
-  }
-}
-
-void movementLid(){
-  if((millis() - lastUpdateLid) > updateIntervalLid){  // time to update
-    lastUpdateLid = millis();
-
-    if (posLid > endPosLid){
-      posLid -= incrementLid;
-    } else {
-      posLid += incrementLid;
-    } 
-    lid.write(posLid);
-    state = WAITING; 
-
-    Serial.print("posLid: ");
-    Serial.print(posLid);
-    Serial.print(" - endPosLid: ");
-    Serial.println(endPosLid);
-    
-    if(posLid == endPosLid) {
-      finishedPrevStep = true;
-      if (nextLidState != INACTIVELID) {
-        lidState = nextLidState;
-      } else {
-        lidState = INACTIVELID;
-      }
-    }
-  }
-}
-
-void setDisplayPicID(int _picID) {
-  Serial1.print("p0.pic=");Serial1.print(_picID);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff); 
-}
 
 void lightUp(){
   if (sensorState == HIGH) { //
