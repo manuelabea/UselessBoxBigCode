@@ -10,6 +10,7 @@
 #include "actions.h"
 #include "myLidServo.h"
 #include "display.h"
+#include "motor.h"
 
 /*TOGGLE************************************************************************/
 Bounce bounceToggle = Bounce();
@@ -25,14 +26,6 @@ volatile int sensorState;
 volatile int oldSensorState;
 
 
-/*Motor************************************************************************/
-// Create an instance of the DRV8833:
-//DRV8833 driver = DRV8833();
-
-// Pin numbers
-const int inputA1 = 14, inputA2 = 15, inputB1 = 19, inputB2 = 18;
-const int nsleep = 22;
-volatile int speed;
 
 
 /*OTHER************************************************************************/
@@ -67,14 +60,9 @@ void setup() {
   if(bounceToggle.read() == HIGH){
     setServoState(FLIPSWITCHBACK);
   }
-  /*
-  pinMode(nsleep, INPUT_PULLUP);
-  digitalWrite(nsleep,HIGH); //enable Driver
+  
+  setUpMotor();
 
-  driver.attachMotorA(inputA1, inputA2);
-  driver.attachMotorB(inputB1, inputB2);
-  speed = 80;
-*/
 }
 
 void loop() {
@@ -174,44 +162,7 @@ void switchStates(){
 
 
 
-void checkServoState(){
-  
-  switch (getServoState()) {
-    case INACTIVE:
-      break;
-    case MOVINGSERVO:
-      movement();
-      break;
-    case FLIPSWITCHBACK:
-      setTargetPositionServo(10, 1, 170);
-      setTargetPositionServo(10, 1, 85);
-      setDisplayPicID(36);
-      setNextServoState(INACTIVE);
-      break;
-    case RETURN:
-      setTargetPositionServo(10, 1, 170);
-      setDisplayPicID(33);
-      break;
-    case THREESTEPMOVEMENT1:
-      setTargetPositionServo(10, 1, 130);
-      setNextServoState(THREESTEPMOVEMENT2);
-      setDisplayPicID(34); 
-      break;
-    case THREESTEPMOVEMENT2:
-      setTargetPositionServo(10, 1, 160);
-      setNextServoState(THREESTEPMOVEMENT3);
-      break;
-    case THREESTEPMOVEMENT3:
-      setTargetPositionServo(10, 1, 85);
-      setNextServoState(RETURN);
-      break;
-    case FLIPSWITCHBACKSLOW:
-      setTargetPositionServo(30, 1, 85);
-      setNextServoState(INACTIVE);
-      setDisplayPicID(35);
-      break;
-  }
-}
+
 
 
 

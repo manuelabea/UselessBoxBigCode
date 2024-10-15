@@ -25,5 +25,6 @@ servoStates_t getServoState();
 void setNextServoState(servoStates_t _nextState);
 void movement();
 void setTargetPositionServo(int _updateInterval, int _increment, int _endPos);
+void checkServoState();
 
 #endif
