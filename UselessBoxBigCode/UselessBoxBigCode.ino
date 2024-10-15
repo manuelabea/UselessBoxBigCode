@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include <Bounce2.h>
 #include <Servo.h>
-#include "FastLED.h"
+//#include "FastLED.h"
 #include <DRV8833.h>
+
+#include "led.h"
 
 /*TOGGLE************************************************************************/
 Bounce bounceToggle = Bounce();
@@ -65,26 +67,6 @@ bool sensorInterrupted;
 volatile int sensorState;
 volatile int oldSensorState;
 
-/*LED************************************************************************/
-const int ledPin = 32;
-
-#define LED_TYPE    NEOPIXEL
-#define COLOR_ORDER GRB
-#define NUM_LEDS    6
-CRGB leds[NUM_LEDS];
-#define BRIGHTNESS 123
-#define FRAMES_PER_SECOND  120
-
-uint8_t hue;
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
-
-enum ledStates_t {
-  NOLED,
-  RED,
-  GREEN,
-  BLUE
-};
-ledStates_t ledState;
 
 /*Motor************************************************************************/
 // Create an instance of the DRV8833:
@@ -131,10 +113,7 @@ void setup() {
   pinMode(sensorPin, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(sensorPin), sensorInterrupt, CHANGE);
 
-  FastLED.addLeds<NEOPIXEL, 32>(leds, NUM_LEDS);
-  FastLED.setBrightness(BRIGHTNESS);
-  FastLED.clear();
-  FastLED.show();
+  setUpLED();
 
   toggleArm.attach(29); 
   toggleArm.write(170);
@@ -221,7 +200,7 @@ void switchStates(){
       servoState = RETURN;
       lidState = CLOSELID;
       state = WAITING;
-      ledState = BLUE;
+      setLEDState(BLUE);
 
       break;
 
@@ -229,7 +208,7 @@ void switchStates(){
       actionCounter++;
       Serial.print("actionCounter: "); Serial.println(actionCounter);
       lidState = OPENLID;
-      ledState = RED;
+      setLEDState(RED);
       /*if (actionCounter%3==1){
         //Serial.println("Got Here");
         actionState = ACTION1;
@@ -329,26 +308,7 @@ void checkLidState(){
   }
 }
 
-void checkLEDState(){
-  switch (ledState) {
-    case NOLED:
-      FastLED.clear();
-      FastLED.show();  // display the pixels
-      break;
-    case RED:
-      fill_solid( leds, NUM_LEDS, CHSV(0,255,255) );  //set color of pixels - red
-      FastLED.show();  // display the pixels
-      break;
-    case GREEN:
-      fill_solid( leds, NUM_LEDS, CHSV(90,255,255) );  //set color of pixels - green
-      FastLED.show();  // display the pixels
-      break;
-    case BLUE:
-      fill_solid( leds, NUM_LEDS, CHSV(160,255,255) );  //set color of pixels - blue
-      FastLED.show();  // display the pixels
-      break;
-  }
-}
+
 
 void setTargetPositionServo(int _updateInterval, int _increment, int _endPos){
 
@@ -428,9 +388,9 @@ void setDisplayPicID(int _picID) {
 
 void lightUp(){
   if (sensorState == HIGH) { //
-    ledState = NOLED;
+    setLEDState(NOLED);
   }
   if (sensorState == LOW) { //
-    ledState = GREEN;
+    setLEDState(GREEN);
   }
 }
