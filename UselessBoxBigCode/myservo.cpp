@@ -80,6 +80,7 @@ void checkServoState(){
     case RETURN:
       setTargetPositionServo(10, 1, 170);
       setDisplayPicID(33);
+      setNextServoState(INACTIVE);
       break;
     case THREESTEPMOVEMENT1:
       setTargetPositionServo(10, 1, 130);

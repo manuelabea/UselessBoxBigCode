@@ -1,8 +1,5 @@
 #include <Arduino.h>
 #include <Bounce2.h>
-#include <Servo.h>
-//#include "FastLED.h"
-#include <DRV8833.h>
 
 #include "led.h"
 #include "toggle.h"
@@ -11,26 +8,17 @@
 #include "myLidServo.h"
 #include "display.h"
 #include "motor.h"
+#include "sensor.h"
 
 /*TOGGLE************************************************************************/
 Bounce bounceToggle = Bounce();
 bool toggled;
 const int togglePin = 36;
 
-
-/*Sensor************************************************************************/
-const int sensorPin = 12;
-
-bool sensorInterrupted;
-volatile int sensorState;
-volatile int oldSensorState;
-
-
-
-
 /*OTHER************************************************************************/
 int actionCounter = 0;
 unsigned long currentMillis;
+unsigned long lastdebug;
 
 /****************************************************************************************************/
 /****************************************************************************************************/
@@ -47,9 +35,8 @@ void setup() {
   setServoState(INACTIVE);
 
   attachInterrupt(digitalPinToInterrupt(togglePin), toggleToggled, CHANGE);
-
-  pinMode(sensorPin, INPUT_PULLDOWN);
-  attachInterrupt(digitalPinToInterrupt(sensorPin), sensorInterrupt, CHANGE);
+  
+  setUpSensor();
 
   setUpLED();
 
@@ -69,10 +56,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   currentMillis = millis();
   
-  if (toggled == true) {
+  //if (toggled == true) {
     debouncerMethod();
-  }
-  if (sensorInterrupted == true) {
+  //}
+  if (getSensorInterruptedState == true) {
     sensorInterruptedMethod();
   }
   switchStates();
@@ -81,20 +68,24 @@ void loop() {
   checkLidState();
   checkLEDState();
 
-  /*Serial.print("lidState: ");
-  Serial.print(lidState);
+  if(millis()-lastdebug > 500){
+    lastdebug=millis();
+  Serial.print("lidState: ");
+  Serial.print(getLidState());
   Serial.print(" - ServoState: ");
-  Serial.println(servoState);
-*/
+  Serial.print(getServoState());
+  Serial.print(" - currentActionStep: ");
+  Serial.print(getActionState());
+  Serial.print(" - finishedPrevStep ");
+  Serial.println(getfinishedPrevStep());
+  }
+
 }
 
 void toggleToggled(){
   toggled = true;
 }
 
-void sensorInterrupt(){
-  sensorInterrupted = true;
-}
 
 void debouncerMethod(){
   bounceToggle.update();
@@ -111,15 +102,6 @@ void debouncerMethod(){
     } else {
       setToggleState(UNTOGGLED);
     }
-  }
-}
-
-void sensorInterruptedMethod(){
-  sensorInterrupted == false;
-  sensorState = digitalRead(sensorPin);
-  if (sensorState != oldSensorState) {
-    oldSensorState = sensorState;
-    lightUp();
   }
 }
 
@@ -160,17 +142,3 @@ void switchStates(){
 
 }
 
-
-
-
-
-
-
-void lightUp(){
-  if (sensorState == HIGH) { //
-    setLEDState(NOLED);
-  }
-  if (sensorState == LOW) { //
-    setLEDState(GREEN);
-  }
-}

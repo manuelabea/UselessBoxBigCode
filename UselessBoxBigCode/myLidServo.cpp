@@ -22,7 +22,7 @@ void setLidState(lidStates_t _state){
   lidState = _state;
 }
 
-void getLidState(){
+lidStates_t getLidState(){
   return lidState;
 }
 
@@ -58,10 +58,10 @@ void movementLid(){
     lid.write(posLid);
     setToggleState(WAITING); 
 
-    Serial.print("posLid: ");
+    /*Serial.print("posLid: ");
     Serial.print(posLid);
     Serial.print(" - endPosLid: ");
-    Serial.println(endPosLid);
+    Serial.println(endPosLid);*/
     
     if(posLid == endPosLid) {
       setFinishedPrevStep(true);

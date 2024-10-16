@@ -5,6 +5,7 @@
 #include <Servo.h>
 #include "toggle.h"
 #include "actions.h"
+#include "myLidServo.h"
 
 enum servoStates_t {
   INACTIVE,

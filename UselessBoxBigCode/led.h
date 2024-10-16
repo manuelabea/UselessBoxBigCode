@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "FastLED.h"
+#include "sensor.h"
 
 enum ledStates_t {
   NOLED,
@@ -14,5 +15,6 @@ enum ledStates_t {
 void checkLEDState();
 void setUpLED();
 void setLEDState(ledStates_t _ledState);
+
 
 #endif

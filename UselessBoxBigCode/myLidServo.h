@@ -16,7 +16,7 @@ enum lidStates_t {
 
 void setUpLid();
 void setLidState(lidStates_t _state);
-void getLidState();
+lidStates_t getLidState();
 void checkLidState();
 void movementLid();
 void setTargetPositionLid(int _updateIntervalLid, int _incrementLid, int _endPosLid);
