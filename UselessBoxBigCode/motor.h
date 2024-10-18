@@ -7,5 +7,10 @@
 
 
 void setUpMotor();
+void driveMotor();
+void stopMotor();
+void attachMotor();
+void detachMotor();
+
 
 #endif

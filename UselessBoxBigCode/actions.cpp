@@ -37,8 +37,26 @@ void checkActionState(){
         finishedPrevStep = false;
         setServoState(THREESTEPMOVEMENT1);
         actionState = NOACTION;
-        Serial.println("Blub");
+        //Serial.println("Blub");
         break;
       } 
-    }
+    case UNTOGGLED_ACTION1: 
+      if (currentActionStep == 0) {
+        attachSensor();
+        attachMotor();
+        currentActionStep++;
+        break;
+      } else if (currentActionStep == 1) {
+        Serial.println(getInterruptedByUser());
+        if (getInterruptedByUser() > 3){
+          Serial.println("Blub");
+          detachSensor();
+          currentActionStep++;
+        }
+        break;
+      } else if (currentActionStep == 2){
+        actionState = NOACTION;
+        break;
+      }
+  }
 }

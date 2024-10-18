@@ -12,9 +12,25 @@ volatile int speed;
 
 void setUpMotor(){
   pinMode(nsleep, INPUT_PULLUP);
-  digitalWrite(nsleep,HIGH); //enable Driver
-
   driver.attachMotorA(inputA1, inputA2);
   driver.attachMotorB(inputB1, inputB2);
   speed = 80;
+}
+
+void detachMotor(){
+  digitalWrite(nsleep,LOW);
+}
+
+void attachMotor(){
+    digitalWrite(nsleep,HIGH);
+}
+
+void driveMotor(){
+  driver.motorAForward();
+  driver.motorBForward();
+}
+
+void stopMotor(){
+  driver.motorAStop();
+  driver.motorBStop();
 }

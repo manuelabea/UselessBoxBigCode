@@ -4,13 +4,13 @@
 #include "Arduino.h"
 #include "myservo.h"
 #include "myLidServo.h"
+#include "sensor.h"
+#include "motor.h"
 
 enum actionStates_t {
   NOACTION,
   ACTION1,
-  ACTION2,
-  ACTION3,
-  FINISHEDACTION
+  UNTOGGLED_ACTION1
 };
 
 void setActionState(actionStates_t _state);
