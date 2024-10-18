@@ -2,6 +2,7 @@
 
 actionStates_t actionState;
 
+
 int currentActionStep;
 bool finishedPrevStep;
 
@@ -16,7 +17,15 @@ actionStates_t getActionState(){
 bool getfinishedPrevStep(){
   return finishedPrevStep;
 }
+/*
+int getActionCounter(){
+  return actionCounter;
+}
 
+void setActionCounter(int _newActionCounter){
+  actionCounter = _newActionCounter;
+}
+*/
 void setFinishedPrevStep(bool _finishedPrevStep){
   finishedPrevStep = _finishedPrevStep;
 }
@@ -50,6 +59,24 @@ void checkActionState(){
         Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 3){
           Serial.println("Blub");
+          detachSensor();
+          currentActionStep++;
+        }
+        break;
+      } else if (currentActionStep == 2){
+        actionState = NOACTION;
+        break;
+      }
+    case UNTOGGLED_ACTION2:
+      if (currentActionStep == 0) {
+        attachSensor();
+        attachMotor();
+        currentActionStep++;
+        break;
+      } else if (currentActionStep == 1) {
+        Serial.println(getInterruptedByUser());
+        if (getInterruptedByUser() > 2 & getFinishedMotorStep() == true){
+          Serial.println("got here?");
           detachSensor();
           currentActionStep++;
         }

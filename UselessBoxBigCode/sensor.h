@@ -13,6 +13,6 @@ void detachSensor();
 int getInterruptedByUser();
 void setInterruptedByUser(int _newValue);
 
-void lightUp();
+
 
 #endif

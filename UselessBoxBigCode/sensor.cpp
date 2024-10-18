@@ -25,60 +25,61 @@ bool edgeDetected;
 int interruptedByUser;
 
 
-void setUpSensor(){
+void setUpSensor() {
   pinMode(sensorPin, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(sensorPin), sensorInterrupt, CHANGE);
 }
 
-int getInterruptedByUser(){
+int getInterruptedByUser() {
   return interruptedByUser;
 }
 
-void setInterruptedByUser(int _newValue){
+void setInterruptedByUser(int _newValue) {
   interruptedByUser = _newValue;
 }
 
-void attachSensor(){
+void attachSensor() {
   useSensor = true;
-  
 }
 
-void detachSensor(){
+void detachSensor() {
   setInterruptedByUser(0);
   useSensor = false;
   detachMotor();
 }
 
-void sensorInterrupt(){
+void sensorInterrupt() {
   sensorInterrupted = true;
 }
 
 
-bool getSensorInterruptedState(){
+bool getSensorInterruptedState() {
   return sensorInterrupted;
 }
 
-void sensorInterruptedMethod(){
-  if (useSensor == true){
-    sensorInterrupted == false;
-    sensorState = digitalRead(sensorPin);
-    if (sensorState != oldSensorState) {
-      oldSensorState = sensorState;
-      lightUp();
+void sensorInterruptedMethod() {
+  if (useSensor == true) {
+    if (sensorInterrupted) {
+      sensorInterrupted == false;
+      sensorState = digitalRead(sensorPin);
       
+      if (sensorState != oldSensorState) {
+        oldSensorState = sensorState;
+        if (sensorState == HIGH) {  //
+          setLEDState(NOLED);
+          if(getMotorState() == DRIVE180){
+            
+          } else {
+            stopMotor();
+          }
+        }
+        if (sensorState == LOW) {  //
+          setLEDState(GREEN);
+          setTimePassedSinceMotorStart();
+          setMotorState(DRIVE180);
+          interruptedByUser++;
+        }
+      }
     }
   }
 }
-
-void lightUp(){
-  if (sensorState == HIGH) { //
-    setLEDState(NOLED);
-    stopMotor();
-  }
-  if (sensorState == LOW) { //
-    setLEDState(GREEN);
-    driveMotor();
-    interruptedByUser++;
-  }
-}
-

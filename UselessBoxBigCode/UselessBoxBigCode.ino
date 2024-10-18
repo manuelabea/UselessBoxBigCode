@@ -16,9 +16,10 @@ bool toggled;
 const int togglePin = 36;
 
 /*OTHER************************************************************************/
-int actionCounter = 0;
+
 unsigned long currentMillis;
 unsigned long lastdebug;
+int actionCounter = 0;
 
 /****************************************************************************************************/
 /****************************************************************************************************/
@@ -59,14 +60,14 @@ void loop() {
   //if (toggled == true) {
     debouncerMethod();
   //}
-  if (getSensorInterruptedState() == true) {
-    sensorInterruptedMethod();
-  }
+    sensorInterruptedMethod();//checkSensor
+
   switchStates();
   checkActionState();
   checkServoState();
   checkLidState();
   checkLEDState();
+  checkMotorState();
 
   if(millis()-lastdebug > 500){
     lastdebug=millis();
@@ -109,18 +110,18 @@ void switchStates(){
   switch (getToggleState()){
     case UNTOGGLED:
       Serial.print("nothing here");
-      Serial.println(actionCounter);
+      //Serial.println(actionCounter);
       setServoState(RETURN);
       setLidState(CLOSELID);
       setToggleState(WAITING);
       setLEDState(BLUE);
-      setActionState(UNTOGGLED_ACTION1);
+      setActionState(UNTOGGLED_ACTION2);
 
       break;
 
     case TOGGLED:
       actionCounter++;
-      Serial.print("actionCounter: "); Serial.println(actionCounter);
+      //Serial.print("actionCounter: "); Serial.println(actionCounter);
       setLidState(OPENLID);
       setLEDState(RED);
       /*if (actionCounter%3==1){
