@@ -76,7 +76,11 @@ void sensorInterruptedMethod() {
         if (sensorState == LOW) {  //
           setLEDState(GREEN);
           setTimePassedSinceMotorStart();
-          setMotorState(DRIVE180);
+          if (getActionState() == UNTOGGLED_ACTION2) {
+            setMotorState(DRIVE180);
+          } else if (getActionState() == UNTOGGLED_ACTION1) {
+            setMotorState(JUSTDRIVE);
+          }
           interruptedByUser++;
         }
       }

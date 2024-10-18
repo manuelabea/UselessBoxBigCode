@@ -15,7 +15,7 @@ unsigned long timePassedSinceMotorStart;
 int currentMotorActionStep = 0;
 bool finishedMotorStep;
 
-bool getFinishedMotorStep(){
+bool getFinishedMotorStep() {
   return finishedMotorStep;
 }
 
@@ -27,11 +27,11 @@ motorStates_t getMotorState() {
   return motorState;
 }
 
-unsigned long getTimePassedSinceMotorStart(){
+unsigned long getTimePassedSinceMotorStart() {
   return timePassedSinceMotorStart;
 }
 
-void setTimePassedSinceMotorStart(){
+void setTimePassedSinceMotorStart() {
   timePassedSinceMotorStart = millis();
 }
 
@@ -79,7 +79,7 @@ void checkMotorState() {
         driver.motorBReverse();
         currentMotorActionStep++;
         break;
-      } else if (currentMotorActionStep == 1 ) {
+      } else if (currentMotorActionStep == 1) {
         if ((millis() - timePassedSinceMotorStart) > 200) {
           stopMotor();
           currentMotorActionStep++;
@@ -91,8 +91,8 @@ void checkMotorState() {
         driveMotor();
         currentMotorActionStep++;
         break;
-      } else if (currentMotorActionStep == 3)   {
-        Serial.println("blub");
+      } else if (currentMotorActionStep == 3) {
+        //Serial.println("blub");
         if ((millis() - timePassedSinceMotorStart) > 400) {
           stopMotor();
           setMotorState(NOMOTORACTION);
@@ -101,7 +101,17 @@ void checkMotorState() {
         break;
       }
     case JUSTDRIVE:
-      driveMotor();
+      if (currentMotorActionStep == 0) {
+        finishedMotorStep = false;
+        driveMotor();
+        currentMotorActionStep++;
+      } else if (currentMotorActionStep == 1) {
+        if ((millis() - timePassedSinceMotorStart) > 300) {
+          stopMotor();
+          setMotorState(NOMOTORACTION);
+          finishedMotorStep = true;
+        }
+      }
       break;
   }
 }

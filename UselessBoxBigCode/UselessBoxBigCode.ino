@@ -115,7 +115,7 @@ void switchStates(){
       setLidState(CLOSELID);
       setToggleState(WAITING);
       setLEDState(BLUE);
-      setActionState(UNTOGGLED_ACTION2);
+      setActionState(UNTOGGLED_ACTION1);
 
       break;
 

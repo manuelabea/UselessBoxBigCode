@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "motor.h"
+#include "actions.h"
 
 void setUpSensor();
 void sensorInterrupt();

@@ -76,7 +76,7 @@ void checkActionState(){
       } else if (currentActionStep == 1) {
         Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 2 & getFinishedMotorStep() == true){
-          Serial.println("got here?");
+          //Serial.println("got here?");
           detachSensor();
           currentActionStep++;
         }
