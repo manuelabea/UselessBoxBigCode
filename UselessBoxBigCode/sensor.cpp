@@ -27,7 +27,7 @@ int interruptedByUser;
 
 void setUpSensor(){
   pinMode(sensorPin, INPUT_PULLDOWN);
-  
+  attachInterrupt(digitalPinToInterrupt(sensorPin), sensorInterrupt, CHANGE);
 }
 
 int getInterruptedByUser(){
@@ -40,7 +40,7 @@ void setInterruptedByUser(int _newValue){
 
 void attachSensor(){
   useSensor = true;
-  attachInterrupt(digitalPinToInterrupt(sensorPin), sensorInterrupt, CHANGE);
+  
 }
 
 void detachSensor(){
