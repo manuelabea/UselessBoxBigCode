@@ -3,6 +3,8 @@
 
 #include "Arduino.h"
 #include <DRV8833.h>
+#include "sensor.h"
+
 
 void setUpMotor();
 

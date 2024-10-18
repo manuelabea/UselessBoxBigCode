@@ -34,7 +34,7 @@ void setup() {
   setToggleState(WAITING);
   setServoState(INACTIVE);
 
-  attachInterrupt(digitalPinToInterrupt(togglePin), toggleToggled, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(togglePin), toggleToggled, CHANGE);
   
   setUpSensor();
 
@@ -59,7 +59,7 @@ void loop() {
   //if (toggled == true) {
     debouncerMethod();
   //}
-  if (getSensorInterruptedState == true) {
+  if (getSensorInterruptedState() == true) {
     sensorInterruptedMethod();
   }
   switchStates();
@@ -70,14 +70,14 @@ void loop() {
 
   if(millis()-lastdebug > 500){
     lastdebug=millis();
-  Serial.print("lidState: ");
+  /*Serial.print("lidState: ");
   Serial.print(getLidState());
   Serial.print(" - ServoState: ");
   Serial.print(getServoState());
   Serial.print(" - currentActionStep: ");
   Serial.print(getActionState());
   Serial.print(" - finishedPrevStep ");
-  Serial.println(getfinishedPrevStep());
+  Serial.println(getfinishedPrevStep());*/
   }
 
 }

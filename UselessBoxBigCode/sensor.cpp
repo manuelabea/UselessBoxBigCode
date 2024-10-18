@@ -1,12 +1,26 @@
-
-
 #include "led.h"
+#include "sensor.h"
 
 const int sensorPin = 12;
-
 bool sensorInterrupted;
 volatile int sensorState;
 volatile int oldSensorState;
+
+///////
+const int frontSensorPin = 10;
+bool frontsensorInterrupted;
+volatile int frontsensorState;
+volatile int oldfrontSensorState;
+
+const int backSensorPin = 5;
+bool backsensorInterrupted;
+volatile int backsensorState;
+volatile int oldbackSensorState;
+
+
+bool edgeDetected;
+
+
 
 void setUpSensor(){
   pinMode(sensorPin, INPUT_PULLDOWN);
@@ -16,6 +30,7 @@ void setUpSensor(){
 void sensorInterrupt(){
   sensorInterrupted = true;
 }
+
 
 bool getSensorInterruptedState(){
   return sensorInterrupted;
