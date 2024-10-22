@@ -10,6 +10,7 @@
 enum actionStates_t {
   NOACTION,
   ACTION1,
+  ACTION2,
   UNTOGGLED_ACTION1,
   UNTOGGLED_ACTION2
 };

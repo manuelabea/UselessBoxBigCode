@@ -12,6 +12,8 @@ int endPosLid;
 lidStates_t lidState;
 lidStates_t nextLidState;
 
+int rattleCounter;
+
 void setUpLid(){
   lid.attach(25); 
   lid.write(110);
@@ -26,10 +28,18 @@ lidStates_t getLidState(){
   return lidState;
 }
 
+void setNextLidState(lidStates_t _nextLidState){
+  nextLidState = _nextLidState;
+}
+
 void checkLidState(){
   
   switch (lidState) {
     case INACTIVELID:
+      break;
+    case FINISHEDSTEP:
+      setFinishedPrevStep(true);
+      setNextLidState(INACTIVELID);
       break;
     case MOVINGLID:
       movementLid();
@@ -37,12 +47,28 @@ void checkLidState(){
     case OPENLID:
       setTargetPositionLid(10, 1, 180);
       setDisplayPicID(36);
-      nextLidState = INACTIVELID;
+      setNextLidState(FINISHEDSTEP);
       break;
     case CLOSELID:
       setTargetPositionLid(10, 1, 110);
       setDisplayPicID(33);
       break;
+    case RATTLELID:
+      rattleCounter=0;
+      setNextLidState(RATTLELID_OPEN);
+    case RATTLELID_OPEN:
+      setTargetPositionLid(6, 1, 180);
+      if (rattleCounter < random(1, 3)){
+        rattleCounter++;
+        setNextLidState(RATTLELID_CLOSE);
+      } else {
+        setNextLidState(FINISHEDSTEP);
+      }
+      break;
+    case RATTLELID_CLOSE:
+      setTargetPositionLid(6, 1, 110);
+      setNextLidState(RATTLELID_OPEN);
+      break;      
   }
 }
 
@@ -64,7 +90,7 @@ void movementLid(){
     Serial.println(endPosLid);*/
     
     if(posLid == endPosLid) {
-      setFinishedPrevStep(true);
+      
       if (nextLidState != INACTIVELID) {
         lidState = nextLidState;
       } else {

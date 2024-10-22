@@ -36,7 +36,7 @@ void checkActionState(){
       currentActionStep = 0;
       finishedPrevStep = false;
       break;    
-    case ACTION1:
+    case ACTION1://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         finishedPrevStep = false;
         setLidState(OPENLID);
@@ -48,8 +48,21 @@ void checkActionState(){
         actionState = NOACTION;
         //Serial.println("Blub");
         break;
-      } 
-    case UNTOGGLED_ACTION1: 
+      }
+    case ACTION2://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (currentActionStep == 0) {
+          finishedPrevStep = false;
+          setLidState(RATTLELID);
+          currentActionStep++;
+          break;
+      } else if (currentActionStep == 1 && finishedPrevStep == true) {
+          finishedPrevStep = false;
+          setServoState(FLIPSWITCHBACK);
+          actionState = NOACTION;
+          //Serial.println("Blub");
+          break;
+      }
+    case UNTOGGLED_ACTION1://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         attachSensor();
         attachMotor();
@@ -67,7 +80,7 @@ void checkActionState(){
         actionState = NOACTION;
         break;
       }
-    case UNTOGGLED_ACTION2:
+    case UNTOGGLED_ACTION2://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         attachSensor();
         attachMotor();

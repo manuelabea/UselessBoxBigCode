@@ -115,14 +115,14 @@ void switchStates(){
       setLidState(CLOSELID);
       setToggleState(WAITING);
       setLEDState(BLUE);
-      setActionState(UNTOGGLED_ACTION1);
+      setActionState(NOACTION);
 
       break;
 
     case TOGGLED:
       actionCounter++;
       //Serial.print("actionCounter: "); Serial.println(actionCounter);
-      setLidState(OPENLID);
+      //setLidState(OPENLID);
       setLEDState(RED);
       /*if (actionCounter%3==1){
         //Serial.println("Got Here");
@@ -134,7 +134,7 @@ void switchStates(){
         actionState = ACTION3;
         //Serial.println("Got Here");
       }*/
-      setActionState(ACTION1);
+      setActionState(ACTION2);
       setToggleState(WAITING);
       break;
 

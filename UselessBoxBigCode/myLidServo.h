@@ -9,9 +9,13 @@
 
 enum lidStates_t {
   INACTIVELID,
+  FINISHEDSTEP,
   MOVINGLID,
   OPENLID,
-  CLOSELID  
+  CLOSELID,
+  RATTLELID,
+  RATTLELID_OPEN,
+  RATTLELID_CLOSE
 };
 
 void setUpLid();
