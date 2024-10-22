@@ -6,6 +6,17 @@ actionStates_t actionState;
 int currentActionStep;
 bool finishedPrevStep;
 
+actionStates_t randomActions[ ] = {ACTION1, ACTION2};
+int randomAction;
+
+
+void setRandomActionState(){
+  randomAction = random(0,2);
+  actionState = randomActions[randomAction];
+  Serial.print("Random State: "); Serial.println(actionState);
+}
+
+
 void setActionState(actionStates_t _state){
   actionState = _state;
 }
@@ -13,6 +24,8 @@ void setActionState(actionStates_t _state){
 actionStates_t getActionState(){
   return actionState;
 }
+
+
 
 bool getfinishedPrevStep(){
   return finishedPrevStep;
@@ -69,9 +82,9 @@ void checkActionState(){
         currentActionStep++;
         break;
       } else if (currentActionStep == 1) {
-        Serial.println(getInterruptedByUser());
+        //Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 3){
-          Serial.println("Blub");
+          //Serial.println("Blub");
           detachSensor();
           currentActionStep++;
         }
@@ -87,7 +100,7 @@ void checkActionState(){
         currentActionStep++;
         break;
       } else if (currentActionStep == 1) {
-        Serial.println(getInterruptedByUser());
+        //Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 2 & getFinishedMotorStep() == true){
           //Serial.println("got here?");
           detachSensor();

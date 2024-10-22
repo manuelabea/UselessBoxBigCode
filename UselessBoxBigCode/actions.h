@@ -15,6 +15,7 @@ enum actionStates_t {
   UNTOGGLED_ACTION2
 };
 
+void setRandomActionState();
 void setActionState(actionStates_t _state);
 actionStates_t getActionState();
 void setFinishedPrevStep(bool _finishedPrevStep);

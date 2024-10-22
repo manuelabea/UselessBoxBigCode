@@ -134,7 +134,8 @@ void switchStates(){
         actionState = ACTION3;
         //Serial.println("Got Here");
       }*/
-      setActionState(ACTION2);
+      //setActionState(ACTION2);
+      setRandomActionState();
       setToggleState(WAITING);
       break;
 
