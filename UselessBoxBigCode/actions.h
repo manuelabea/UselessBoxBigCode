@@ -11,16 +11,20 @@ enum actionStates_t {
   NOACTION,
   ACTION1,
   ACTION2,
+  ACTION3,
+  ACTION4,
   UNTOGGLED_ACTION1,
   UNTOGGLED_ACTION2
 };
 
 void setRandomActionState();
+void setRandomUntoggledActionState();
 void setActionState(actionStates_t _state);
 actionStates_t getActionState();
 void setFinishedPrevStep(bool _finishedPrevStep);
 void checkActionState();
 bool getfinishedPrevStep();
+
 //int getActionCounter();
 //void setActionCounter(int _newActionCounter);
 

@@ -7,8 +7,11 @@
 
 enum motorStates_t {
   NOMOTORACTION,
+  FINISHEDMOTORSTEP,
   DRIVE180,
-  JUSTDRIVE
+  JUSTDRIVE,
+  REVERSE_TIMED,
+  FORWARD_TIMED
 };
 
 void setMotorState(motorStates_t _drivingState);

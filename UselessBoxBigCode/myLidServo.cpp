@@ -57,7 +57,7 @@ void checkLidState(){
       rattleCounter=0;
       setNextLidState(RATTLELID_OPEN);
     case RATTLELID_OPEN:
-      setTargetPositionLid(6, 1, 180);
+      setTargetPositionLid(2, 1, 180);
       if (rattleCounter < random(1, 3)){
         rattleCounter++;
         setNextLidState(RATTLELID_CLOSE);
@@ -66,7 +66,7 @@ void checkLidState(){
       }
       break;
     case RATTLELID_CLOSE:
-      setTargetPositionLid(6, 1, 110);
+      setTargetPositionLid(2, 1, 110);
       setNextLidState(RATTLELID_OPEN);
       break;      
   }

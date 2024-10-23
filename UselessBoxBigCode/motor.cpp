@@ -55,6 +55,11 @@ void driveMotor() {
   driver.motorBForward();
 }
 
+void reverseMotor() {
+  driver.motorAReverse();
+  driver.motorBReverse();
+}
+
 /*void drive180AndAttack(){
   driver.motorAForward();
   if (startedDriving)
@@ -71,6 +76,9 @@ void checkMotorState() {
       currentMotorActionStep = 0;
       stopMotor();
       break;
+    case FINISHEDMOTORSTEP:
+      setFinishedPrevStep(true);
+      setMotorState(NOMOTORACTION);
     case DRIVE180:
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
@@ -96,6 +104,32 @@ void checkMotorState() {
         if ((millis() - timePassedSinceMotorStart) > 400) {
           stopMotor();
           setMotorState(NOMOTORACTION);
+          finishedMotorStep = true;
+        }
+        break;
+      }
+    case REVERSE_TIMED:
+      if (currentMotorActionStep == 0) {
+        finishedMotorStep = false;
+        reverseMotor();
+        currentMotorActionStep++;
+      } else if (currentMotorActionStep == 1) {
+        if ((millis() - timePassedSinceMotorStart) > 200) {
+          stopMotor();
+          setMotorState(FINISHEDMOTORSTEP);
+          finishedMotorStep = true;
+        }
+        break;
+      }
+    case FORWARD_TIMED:
+      if (currentMotorActionStep == 0) {
+        finishedMotorStep = false;
+        driveMotor();
+        currentMotorActionStep++;
+      } else if (currentMotorActionStep == 1) {
+        if ((millis() - timePassedSinceMotorStart) > 200) {
+          stopMotor();
+          setMotorState(FINISHEDMOTORSTEP);
           finishedMotorStep = true;
         }
         break;

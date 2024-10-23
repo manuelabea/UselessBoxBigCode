@@ -74,18 +74,15 @@ void checkServoState(){
     case FLIPSWITCHBACK:
       setTargetPositionServo(10, 1, 170);
       setTargetPositionServo(10, 1, 85);
-      setDisplayPicID(36);
       setNextServoState(INACTIVE);
       break;
     case RETURN:
       setTargetPositionServo(10, 1, 170);
-      setDisplayPicID(33);
       setNextServoState(INACTIVE);
       break;
     case THREESTEPMOVEMENT1:
       setTargetPositionServo(10, 1, 130);
       setNextServoState(THREESTEPMOVEMENT2);
-      setDisplayPicID(34); 
       break;
     case THREESTEPMOVEMENT2:
       setTargetPositionServo(10, 1, 160);
@@ -98,7 +95,6 @@ void checkServoState(){
     case FLIPSWITCHBACKSLOW:
       setTargetPositionServo(30, 1, 85);
       setNextServoState(INACTIVE);
-      setDisplayPicID(35);
       break;
   }
 }
