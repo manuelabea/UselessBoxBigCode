@@ -18,12 +18,12 @@ int number_of_stored_values_in_randomUntoggledActions = sizeof(randomUntoggledAc
 void setRandomActionState(){
   randomAction = random(0,number_of_stored_values_in_randomActions);
   actionState = randomActions[1];
-  Serial.print("Random State: "); Serial.println(actionState);
+  //Serial.print("Random State: "); Serial.println(actionState);
 }
 
 void setRandomUntoggledActionState(){
   randomUntoggledAction = random(0,number_of_stored_values_in_randomUntoggledActions);
-  actionState = randomActions[randomUntoggledAction];
+  actionState = randomUntoggledActions[randomUntoggledAction];
   Serial.print("Random (untoggled) State: "); Serial.println(actionState);
 }
 

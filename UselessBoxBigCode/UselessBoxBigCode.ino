@@ -125,16 +125,6 @@ void switchStates(){
       //Serial.print("actionCounter: "); Serial.println(actionCounter);
       //setLidState(OPENLID);
       setLEDState(RED);
-      /*if (actionCounter%3==1){
-        //Serial.println("Got Here");
-        actionState = ACTION1;
-      } else if (actionCounter%3==2){
-        //Serial.println("Got Here");
-        actionState = ACTION2;
-      } else {
-        actionState = ACTION3;
-        //Serial.println("Got Here");
-      }*/
       //setActionState(ACTION2);
       setRandomActionState();
       setToggleState(WAITING);
