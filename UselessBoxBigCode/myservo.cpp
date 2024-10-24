@@ -80,6 +80,9 @@ void checkServoState(){
       setTargetPositionServo(10, 1, 170);
       setNextServoState(INACTIVE);
       break;
+    case RETURNVERYSLOW:
+      setTargetPositionServo(50, 1, 170);
+      setNextServoState(INACTIVE);
     case THREESTEPMOVEMENT1:
       setTargetPositionServo(10, 1, 130);
       setNextServoState(THREESTEPMOVEMENT2);
@@ -96,5 +99,10 @@ void checkServoState(){
       setTargetPositionServo(30, 1, 85);
       setNextServoState(INACTIVE);
       break;
+    case FLIPSWITCHBACKVERYSLOW:
+      setTargetPositionServo(50, 1, 85);
+      setNextServoState(INACTIVE);
+      break;
   }
+  
 }

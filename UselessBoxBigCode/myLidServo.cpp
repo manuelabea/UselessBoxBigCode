@@ -49,6 +49,10 @@ void checkLidState(){
       setDisplayPicID(36);
       setNextLidState(FINISHEDSTEP);
       break;
+    case OPENLIDVERYSLOW: 
+      setTargetPositionLid(50, 1, 180);
+      setNextLidState(FINISHEDSTEP);
+      break;
     case CLOSELID:
       setTargetPositionLid(10, 1, 110);
       setDisplayPicID(33);
@@ -66,7 +70,7 @@ void checkLidState(){
       }
       break;
     case RATTLELID_CLOSE:
-      setTargetPositionLid(2, 1, 110);
+      setTargetPositionLid(2, 1, 150);
       setNextLidState(RATTLELID_OPEN);
       break;      
   }

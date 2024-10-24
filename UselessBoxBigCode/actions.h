@@ -13,8 +13,10 @@ enum actionStates_t {
   ACTION2,
   ACTION3,
   ACTION4,
+  ACTION5,
   UNTOGGLED_ACTION1,
-  UNTOGGLED_ACTION2
+  UNTOGGLED_ACTION2,
+  UNTOGGLED_ACTION3
 };
 
 void setRandomActionState();

@@ -109,14 +109,14 @@ void debouncerMethod(){
 void switchStates(){
   switch (getToggleState()){
     case UNTOGGLED:
-      Serial.print("nothing here");
+      //Serial.print("nothing here");
       //Serial.println(actionCounter);
       setServoState(RETURN);
       setLidState(CLOSELID);
       setToggleState(WAITING);
       setLEDState(BLUE);
-      setActionState(UNTOGGLED_ACTION2);
-      //setRandomUntoggledActionState();
+      //setActionState(UNTOGGLED_ACTION2);
+      setRandomUntoggledActionState();
 
       break;
 
@@ -125,7 +125,7 @@ void switchStates(){
       //Serial.print("actionCounter: "); Serial.println(actionCounter);
       //setLidState(OPENLID);
       setLEDState(RED);
-      //setActionState(ACTION2);
+      //setActionState(ACTION5);
       setRandomActionState();
       setToggleState(WAITING);
       break;
