@@ -68,6 +68,7 @@ void loop() {
   checkLidState();
   checkLEDState();
   checkMotorState();
+  checkDisplayState();
 
   if(millis()-lastdebug > 500){
     lastdebug=millis();
@@ -76,7 +77,7 @@ void loop() {
   Serial.print(" - ServoState: ");
   Serial.print(getServoState());
   Serial.print(" - currentActionStep: ");
-  Serial.print(getActionState());
+  Serial.print(getCurrentActionStep());
   Serial.print(" - finishedPrevStep ");
   Serial.println(getfinishedPrevStep());*/
   }
@@ -115,7 +116,7 @@ void switchStates(){
       setLidState(CLOSELID);
       setToggleState(WAITING);
       setLEDState(BLUE);
-      //setActionState(UNTOGGLED_ACTION2);
+      //setActionState(UNTOGGLED_ACTION1);
       setRandomUntoggledActionState();
 
       break;
@@ -125,7 +126,7 @@ void switchStates(){
       //Serial.print("actionCounter: "); Serial.println(actionCounter);
       //setLidState(OPENLID);
       setLEDState(RED);
-      //setActionState(ACTION5);
+      //setActionState(ACTION6);
       setRandomActionState();
       setToggleState(WAITING);
       break;

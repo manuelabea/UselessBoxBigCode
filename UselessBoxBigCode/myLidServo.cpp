@@ -40,13 +40,14 @@ void checkLidState(){
     case FINISHEDSTEP:
       setFinishedPrevStep(true);
       setNextLidState(INACTIVELID);
+      Serial.print(getCurrentActionStep());
+      Serial.println(" ActionStep");
       break;
     case MOVINGLID:
       movementLid();
       break;
     case OPENLID:
       setTargetPositionLid(10, 1, 180);
-      setDisplayPicID(36);
       setNextLidState(FINISHEDSTEP);
       break;
     case OPENLIDVERYSLOW: 
@@ -60,18 +61,26 @@ void checkLidState(){
     case RATTLELID:
       rattleCounter=0;
       setNextLidState(RATTLELID_OPEN);
+      Serial.print(getCurrentActionStep());
+        Serial.println(" ActionStep1");
     case RATTLELID_OPEN:
       setTargetPositionLid(2, 1, 180);
       if (rattleCounter < random(1, 3)){
         rattleCounter++;
         setNextLidState(RATTLELID_CLOSE);
+        Serial.print(getCurrentActionStep());
+        Serial.println(" ActionStep2");
       } else {
         setNextLidState(FINISHEDSTEP);
+        Serial.print(getCurrentActionStep());
+        Serial.println(" ActionStep3");
       }
       break;
     case RATTLELID_CLOSE:
       setTargetPositionLid(2, 1, 150);
       setNextLidState(RATTLELID_OPEN);
+      Serial.print(getCurrentActionStep());
+        Serial.println(" ActionStep4");
       break;      
   }
 }

@@ -8,7 +8,7 @@ bool finishedPrevStep;
 unsigned long startedActionTimestamp;
 unsigned long currentMillisAction;
 
-actionStates_t randomActions[ ] = {ACTION1, ACTION2, ACTION3, ACTION4, ACTION5};
+actionStates_t randomActions[ ] = {ACTION1, ACTION2, ACTION3, ACTION4, ACTION5, ACTION6};
 int randomAction;
 int number_of_stored_values_in_randomActions = sizeof(randomActions)/sizeof(actionStates_t);
 
@@ -29,6 +29,10 @@ void setRandomUntoggledActionState(){
   Serial.print("Random (untoggled) State: "); Serial.println(actionState);
 }
 
+void resetActionStepAndFinishedPrevStep(){
+  currentActionStep = 0;
+  setFinishedPrevStep(true);
+}
 
 void setActionState(actionStates_t _state){
   actionState = _state;
@@ -38,6 +42,9 @@ actionStates_t getActionState(){
   return actionState;
 }
 
+int getCurrentActionStep(){
+  return currentActionStep;
+}
 
 
 bool getfinishedPrevStep(){
@@ -131,16 +138,35 @@ void checkActionState(){
         finishedPrevStep = false;
         setServoState(FLIPSWITCHBACKVERYSLOW);
         actionState = NOACTION;
-        Serial.println("Blub");
+        //Serial.println("Blub");
         break;
       }
+    case ACTION6:
+      if(currentActionStep == 0){
+        finishedPrevStep = false;
+        setDisplayChangeTimestamp();
+        setDisplayState(DISPLAYSHOWING_HOMERGIF);
+        currentActionStep++;
+      }
+      else if (currentActionStep == 1 && finishedPrevStep == true) {
+        finishedPrevStep = false;
+        setLidState(OPENLID);
+        //setDisplayPicID(25);
+        currentActionStep++;
+      } else if (currentActionStep == 2 && finishedPrevStep == true) {
+        finishedPrevStep = false;
+        setDisplayPicID(25);
+        setServoState(FLIPSWITCHBACKSLOW);
+        actionState = NOACTION;
+        Serial.println("Blub");
+      }
+      break;
     case UNTOGGLED_ACTION1://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         //setDisplayPicID(38);
         attachSensor();
         attachMotor();
         currentActionStep++;
-        break;
       } else if (currentActionStep == 1) {
         //Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 3){
@@ -148,18 +174,17 @@ void checkActionState(){
           detachSensor();
           currentActionStep++;
         }
-        break;
       } else if (currentActionStep == 2){
         actionState = NOACTION;
-        break;
+        
       }
+      break;
     case UNTOGGLED_ACTION2://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         setDisplayPicID(33);
         attachSensor();
         attachMotor();
         currentActionStep++;
-        break;
       } else if (currentActionStep == 1) {
         //Serial.println(getInterruptedByUser());
         if (getInterruptedByUser() > 2 & getFinishedMotorStep() == true){
@@ -167,24 +192,23 @@ void checkActionState(){
           detachSensor();
           currentActionStep++;
         }
-        break;
       } else if (currentActionStep == 2){
         actionState = NOACTION;
-        break;
       }
+      break;
     case UNTOGGLED_ACTION3:
       if (currentActionStep == 0) {
         finishedPrevStep = false;
         setServoState(RETURNVERYSLOW);
+        setDisplayChangeTimestamp();
         setDisplayPicID(25);
         currentActionStep++;
-        break;
       } else if (currentActionStep == 1 && finishedPrevStep == true) {
         finishedPrevStep = false;
         setLidState(CLOSELID);
         actionState = NOACTION;
         Serial.println("Blub");
-        break;
       }
+      break;
   }
 }
