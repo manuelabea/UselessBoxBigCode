@@ -11,7 +11,8 @@ enum motorStates_t {
   DRIVE180,
   JUSTDRIVE,
   REVERSE_TIMED,
-  FORWARD_TIMED
+  FORWARD_TIMED,
+  THREESIXTY_TIMED
 };
 
 void setMotorState(motorStates_t _drivingState);
@@ -25,5 +26,8 @@ unsigned long getTimePassedSinceMotorStart();
 void setTimePassedSinceMotorStart();
 void checkMotorState();
 bool getFinishedMotorStep();
+void forwardAReverseBMotor();
+void setRandomDirection();
+void reverseAForwardBMotor();
 
 #endif

@@ -164,6 +164,8 @@ void checkActionState(){
     case UNTOGGLED_ACTION1://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         //setDisplayPicID(38);
+        setServoState(RETURN);
+        setLidState(CLOSELID);
         attachSensor();
         attachMotor();
         currentActionStep++;
@@ -208,6 +210,25 @@ void checkActionState(){
         setLidState(CLOSELID);
         actionState = NOACTION;
         Serial.println("Blub");
+      }
+      break;
+    case UNTOGGLED_ACTION4://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      if (currentActionStep == 0) {
+        finishedPrevStep = false;
+        attachMotor();
+        setTimePassedSinceMotorStart();
+        setMotorState(THREESIXTY_TIMED); //TODO
+        currentActionStep++;
+      }
+      else if (currentActionStep == 1) {
+        finishedPrevStep = false;
+        //setDisplayPicID(38);
+        setServoState(RETURN);
+        setLidState(CLOSELID);
+        currentActionStep++;
+      } else if (currentActionStep == 2){
+        actionState = NOACTION;
+        
       }
       break;
   }

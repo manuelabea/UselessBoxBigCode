@@ -112,13 +112,12 @@ void switchStates(){
     case UNTOGGLED:
       //Serial.print("nothing here");
       //Serial.println(actionCounter);
-      setServoState(RETURN);
-      setLidState(CLOSELID);
-      setToggleState(WAITING);
+      
+     
       setLEDState(BLUE);
-      //setActionState(UNTOGGLED_ACTION1);
-      setRandomUntoggledActionState();
-
+      setActionState(UNTOGGLED_ACTION4);
+      //setRandomUntoggledActionState();
+      setToggleState(WAITING);
       break;
 
     case TOGGLED:
