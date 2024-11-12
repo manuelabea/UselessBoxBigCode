@@ -12,7 +12,8 @@ enum motorStates_t {
   JUSTDRIVE,
   REVERSE_TIMED,
   FORWARD_TIMED,
-  THREESIXTY_TIMED
+  THREESIXTY_TIMED,
+  ONEEIGHTY_TIMED
 };
 
 void setMotorState(motorStates_t _drivingState);

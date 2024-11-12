@@ -141,7 +141,7 @@ void checkActionState(){
         //Serial.println("Blub");
         break;
       }
-    case ACTION6:
+    case ACTION6://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if(currentActionStep == 0){
         finishedPrevStep = false;
         setDisplayChangeTimestamp();
@@ -198,7 +198,7 @@ void checkActionState(){
         actionState = NOACTION;
       }
       break;
-    case UNTOGGLED_ACTION3:
+    case UNTOGGLED_ACTION3://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         finishedPrevStep = false;
         setServoState(RETURNVERYSLOW);
@@ -217,7 +217,7 @@ void checkActionState(){
         finishedPrevStep = false;
         attachMotor();
         setTimePassedSinceMotorStart();
-        setMotorState(THREESIXTY_TIMED); //TODO
+        setMotorState(ONEEIGHTY_TIMED); 
         currentActionStep++;
       }
       else if (currentActionStep == 1) {

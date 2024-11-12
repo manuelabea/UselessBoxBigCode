@@ -88,14 +88,14 @@ void stopMotor() {
 
 void checkMotorState() {
   switch (motorState) {
-    case NOMOTORACTION:
+    case NOMOTORACTION://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       currentMotorActionStep = 0;
       stopMotor();
       break;
-    case FINISHEDMOTORSTEP:
+    case FINISHEDMOTORSTEP://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       setFinishedPrevStep(true);
       setMotorState(NOMOTORACTION);
-    case DRIVE180:
+    case DRIVE180://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
         //Serial.println("got here");
@@ -124,7 +124,7 @@ void checkMotorState() {
         }
         break;
       }
-    case REVERSE_TIMED:
+    case REVERSE_TIMED://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
         reverseMotor();
@@ -137,7 +137,7 @@ void checkMotorState() {
         }
         break;
       }
-    case FORWARD_TIMED:
+    case FORWARD_TIMED://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
         driveMotor();
@@ -150,7 +150,7 @@ void checkMotorState() {
         }
         break;
       }
-    case JUSTDRIVE:
+    case JUSTDRIVE://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
         driveMotor();
@@ -163,8 +163,7 @@ void checkMotorState() {
         }
       }
       break;
-      //TODO
-    case THREESIXTY_TIMED: 
+    case THREESIXTY_TIMED: //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentMotorActionStep == 0) {
         finishedMotorStep = false;
         setRandomDirection();
@@ -176,6 +175,24 @@ void checkMotorState() {
         currentMotorActionStep++;
       } else if (currentMotorActionStep == 1) {
         if ((millis() - timePassedSinceMotorStart) > 950) {
+          stopMotor();
+          setMotorState(FINISHEDMOTORSTEP);
+          finishedMotorStep = true;
+        }
+        break;
+      }
+    case ONEEIGHTY_TIMED:////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+      if (currentMotorActionStep == 0) {
+        finishedMotorStep = false;
+        setRandomDirection();
+        if(randomDirection == 0) {
+          forwardAReverseBMotor();
+        } else if (randomDirection == 1){
+          reverseAForwardBMotor();
+        }
+        currentMotorActionStep++;
+      } else if (currentMotorActionStep == 1) {
+        if ((millis() - timePassedSinceMotorStart) > 475) {
           stopMotor();
           setMotorState(FINISHEDMOTORSTEP);
           finishedMotorStep = true;
