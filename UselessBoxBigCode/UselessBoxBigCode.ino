@@ -21,6 +21,8 @@ unsigned long currentMillis;
 unsigned long lastdebug;
 int actionCounter = 0;
 
+bool initialReturn = false;
+
 /****************************************************************************************************/
 /****************************************************************************************************/
 
@@ -46,6 +48,7 @@ void setup() {
   
 
   if(bounceToggle.read() == HIGH){
+    initialReturn = true;
     setServoState(FLIPSWITCHBACK);
   }
   
@@ -72,14 +75,14 @@ void loop() {
 
   if(millis()-lastdebug > 500){
     lastdebug=millis();
-  /*Serial.print("lidState: ");
+  Serial.print("lidState: ");
   Serial.print(getLidState());
   Serial.print(" - ServoState: ");
   Serial.print(getServoState());
   Serial.print(" - currentActionStep: ");
   Serial.print(getCurrentActionStep());
   Serial.print(" - finishedPrevStep ");
-  Serial.println(getfinishedPrevStep());*/
+  Serial.println(getfinishedPrevStep());
   }
 
 }
@@ -112,8 +115,11 @@ void switchStates(){
     case UNTOGGLED:
       //Serial.print("nothing here");
       //Serial.println(actionCounter);
-      setServoState(RETURN);
-      setLidState(CLOSELID);
+      if(initialReturn ==  true){
+        setServoState(RETURN);
+        setLidState(CLOSELID);
+        initialReturn = false;
+      }
       setToggleState(WAITING);
       setLEDState(BLUE);
       //setActionState(UNTOGGLED_ACTION1);

@@ -9,6 +9,9 @@ unsigned long lastUpdateServo; // last update of position
 int nextPos; 
 int endPos;
 
+#define EINGEZOGEN 170
+#define DRAUSSEN 85
+
   
 servoStates_t servoState;
 servoStates_t nextServoState;
@@ -72,16 +75,16 @@ void checkServoState(){
       movement();
       break;
     case FLIPSWITCHBACK:
-      setTargetPositionServo(10, 1, 170);
-      setTargetPositionServo(10, 1, 85);
+      setTargetPositionServo(10, 1, EINGEZOGEN);
+      setTargetPositionServo(10, 1, DRAUSSEN);
       setNextServoState(INACTIVE);
       break;
     case RETURN:
-      setTargetPositionServo(10, 1, 170);
+      setTargetPositionServo(10, 1, EINGEZOGEN);
       setNextServoState(INACTIVE);
       break;
     case RETURNVERYSLOW:
-      setTargetPositionServo(50, 1, 170);
+      setTargetPositionServo(50, 1, EINGEZOGEN);
       setNextServoState(INACTIVE);
     case THREESTEPMOVEMENT1:
       setTargetPositionServo(10, 1, 130);
@@ -92,15 +95,15 @@ void checkServoState(){
       setNextServoState(THREESTEPMOVEMENT3);
       break;
     case THREESTEPMOVEMENT3:
-      setTargetPositionServo(10, 1, 85);
+      setTargetPositionServo(10, 1, DRAUSSEN);
       setNextServoState(RETURN);
       break;
     case FLIPSWITCHBACKSLOW:
-      setTargetPositionServo(30, 1, 85);
+      setTargetPositionServo(30, 1, DRAUSSEN);
       setNextServoState(INACTIVE);
       break;
     case FLIPSWITCHBACKVERYSLOW:
-      setTargetPositionServo(50, 1, 85);
+      setTargetPositionServo(50, 1, DRAUSSEN);
       setNextServoState(INACTIVE);
       break;
   }

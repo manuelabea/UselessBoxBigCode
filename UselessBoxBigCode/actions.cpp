@@ -8,11 +8,19 @@ bool finishedPrevStep;
 unsigned long startedActionTimestamp;
 unsigned long currentMillisAction;
 
-actionStates_t randomActions[ ] = {ACTION1, ACTION2, ACTION3, ACTION4, ACTION5, ACTION6};
+//actionStates_t randomActions[ ] = {ACTION1, ACTION2, ACTION3, ACTION4, ACTION5, ACTION6};
+//actionStates_t randomActions[ ] = {ACTION2};
+//actionStates_t randomActions[ ] = {ACTION3};
+//actionStates_t randomActions[ ] = {ACTION4};
+//actionStates_t randomActions[ ] = {ACTION5};
+actionStates_t randomActions[ ] = {ACTION6};
 int randomAction;
 int number_of_stored_values_in_randomActions = sizeof(randomActions)/sizeof(actionStates_t);
 
-actionStates_t randomUntoggledActions[ ] = {NOACTION, UNTOGGLED_ACTION1, UNTOGGLED_ACTION2, UNTOGGLED_ACTION3};
+//actionStates_t randomUntoggledActions[ ] = {NOACTION, UNTOGGLED_ACTION1, UNTOGGLED_ACTION2, UNTOGGLED_ACTION3};
+//actionStates_t randomUntoggledActions[ ] = {NOACTION, UNTOGGLED_ACTION1};
+//actionStates_t randomUntoggledActions[ ] = {NOACTION, UNTOGGLED_ACTION2};
+actionStates_t randomUntoggledActions[ ] = {NOACTION, UNTOGGLED_ACTION3};
 int randomUntoggledAction;
 int number_of_stored_values_in_randomUntoggledActions = sizeof(randomUntoggledActions)/sizeof(actionStates_t);
 
@@ -24,7 +32,7 @@ void setRandomActionState(){
 }
 
 void setRandomUntoggledActionState(){
-  randomUntoggledAction = random(0,number_of_stored_values_in_randomUntoggledActions);
+  randomUntoggledAction = random(1,number_of_stored_values_in_randomUntoggledActions);
   actionState = randomUntoggledActions[randomUntoggledAction];
   Serial.print("Random (untoggled) State: "); Serial.println(actionState);
 }
@@ -164,6 +172,8 @@ void checkActionState(){
     case UNTOGGLED_ACTION1://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
         //setDisplayPicID(38);
+        setServoState(RETURN);
+        setLidState(CLOSELID);
         attachSensor();
         attachMotor();
         currentActionStep++;
@@ -181,6 +191,8 @@ void checkActionState(){
       break;
     case UNTOGGLED_ACTION2://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if (currentActionStep == 0) {
+        setServoState(RETURN);
+        setLidState(CLOSELID);
         setDisplayPicID(33);
         attachSensor();
         attachMotor();
@@ -207,8 +219,28 @@ void checkActionState(){
         finishedPrevStep = false;
         setLidState(CLOSELID);
         actionState = NOACTION;
-        Serial.println("Blub");
+        //Serial.println("Blub");
       }
       break;
+      //TODO
+      case UNTOGGLED_ACTION4://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (currentActionStep == 0) {
+          finishedPrevStep = false;
+          attachMotor();
+          setTimePassedSinceMotorStart();
+          setMotorState(THREESIXTY_TIMED); 
+          currentActionStep++;
+        }
+        else if (currentActionStep == 1 && finishedPrevStep == true) {
+          finishedPrevStep = false;
+          //setDisplayPicID(38);
+          setServoState(RETURN);
+          setLidState(CLOSELID);
+          currentActionStep++;
+        } else if (currentActionStep == 2 && finishedPrevStep == true){
+          actionState = NOACTION;
+          
+        }
+        break;
   }
 }

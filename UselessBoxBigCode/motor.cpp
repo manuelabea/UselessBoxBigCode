@@ -15,6 +15,8 @@ unsigned long timePassedSinceMotorStart;
 int currentMotorActionStep = 0;
 bool finishedMotorStep;
 
+int randomDirection;
+
 bool getFinishedMotorStep() {
   return finishedMotorStep;
 }
@@ -68,6 +70,19 @@ void reverseMotor() {
 void stopMotor() {
   driver.motorAStop();
   driver.motorBStop();
+}
+
+void forwardAReverseBMotor(){
+  driver.motorAForward();
+  driver.motorBReverse();
+}
+void reverseAForwardBMotor(){
+  driver.motorAReverse();
+  driver.motorBForward();
+}
+
+void setRandomDirection(){
+  randomDirection = random(0,2);
 }
 
 void checkMotorState() {
@@ -147,5 +162,23 @@ void checkMotorState() {
         }
       }
       break;
+    case THREESIXTY_TIMED: 
+      if (currentMotorActionStep == 0) {
+        finishedMotorStep = false;
+        setRandomDirection();
+        if(randomDirection == 0) {
+          forwardAReverseBMotor();
+        } else if (randomDirection == 1){
+          reverseAForwardBMotor();
+        }
+        currentMotorActionStep++;
+      } else if (currentMotorActionStep == 1) {
+        if ((millis() - timePassedSinceMotorStart) > 950) {
+          stopMotor();
+          setMotorState(FINISHEDMOTORSTEP);
+          finishedMotorStep = true;
+        }
+        break;
+      }
   }
 }

@@ -38,17 +38,17 @@ void playHomerGIF(){
   if(currentID < 24){
     if((currentDisplayMillis - displayChangeTimestamp) > 100){
       setDisplayChangeTimestamp();
-      Serial.print(getCurrentActionStep());
-      Serial.print(" - ");
-      Serial.println(currentID);
+      //Serial.print(getCurrentActionStep());
+      //Serial.print(" - ");
+      //Serial.println(currentID);
       setDisplayPicID(currentID);
       currentID++; 
     }
   }
   if(currentID == 24) {
-    Serial.println(currentID);
+    //Serial.println(currentID);
     currentID = 10;
-    Serial.println(currentID);
+    //Serial.println(currentID);
     setFinishedPrevStep(true);
     setDisplayState(NODISPLAYACTION);
   }
